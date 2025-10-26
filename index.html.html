@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Itinéraire vers Auditorium Rousselot</title>
+  https://unpkg.com/leaflet@1.9.4/dist/leaflet.css
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script body { font-family: Arial, sans-serif; margin: 20px; }
+    label, select, button { margin: 10px 0; display: block; }
+    .result { margin-top: 20px; padding: 10px; border: 1px solid #ccc; background: #f9f9f9; white-space: pre-line; }
+    #map { height: 400px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Comment se rendre à l'Auditorium Rousselot (DR-1119-1)</h1>
+
+  <label for="entry">Choisissez votre point d'entrée :</label>
+  <select id="entry">
+    <option value="lachapelle">Pavillon Lachapelle (entrée rue Sherbrooke)</option>
+    <option value="stationnement">Stationnement des visiteurs (entrée arrière Lachapelle)</option>
+  </select>
+
+  <button onclick="showItinerary()">Afficher l'itinéraire</button>
+
+  <div class="result" id="result"></div>
+  <div id="map"></div>
+
+  <script>
+    const itineraries = {
+      "lachapelle": [
+        "1. Dans le hall d'entrée, prendre l'ascenseur #1, #2, #3, ou #4.",
+        "2. Descendre au RDC.",
+        "3. À la sortie de l'ascenseur, tourner à droite.",
+        "4. Tourner à droite dans le corridor (direction cafétéria).",
+        "5. À l'intersection des corridors, suivre les directions vers la cafétéria.",
+        "6. L'auditorium Rousselot se trouve à votre droite, local DR-1119-1."
+      ],
+      "stationnement": [
+        "1. Du stationnement, emprunter l'entrée couverte du Lachapelle (située à l'ouest du bâtiment).",
+        "2. À l'entrée, dirigez-vous vers la droite, et ensuite vers la gauche pour prendre l'ascenseur #1, #2, #3, ou #4.",
+        "3. Monter au RDC.",
+        "4. À la sortie de l'ascenseur, tourner à droite.",
+        "5. À l'intersection des corridors, suivre les directions vers la cafétéria.",
+        "6. L'auditorium Rousselot se trouve à votre droite, local DR-1119-1."
+      ]
+    };
+
+    function showItinerary() {
+      const entry = document.getElementById('entry').value;
+      const steps = itineraries[entry];
+      document.getElementById('result').innerText = steps.join('\\n');
+    }
+
+    const map = L.map('map').setView([45.526, -73.558], 17);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const markers = {
+      "lachapelle": L.marker([45.5262, -73.5578]).bindPopup("Entrée rue Sherbrooke - Pavillon Lachapelle"),
+      "stationnement": L.marker([45.5258, -73.5585]).bindPopup("Entrée stationnement visiteurs"),
+      "auditorium": L.marker([45.5260, -73.5580]).bindPopup("Auditorium Rousselot (DR-1119-1)")
+    };
+
+    markers.lachapelle.addTo(map);
+    markers.stationnement.addTo(map);
+    markers.auditorium.addTo(map);
+  </script>
+</body>
+</html>
